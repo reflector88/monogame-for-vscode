@@ -1,14 +1,11 @@
-# MonoGame for VSCode
+# MonoGame for VS Code
 
-Adds some features of the Visual Studio 2022 MonoGame extension to VS Code.
+Better VS Code integration for MonoGame. Adds features of the Visual Studio MonoGame extension to VS Code.
 
 ## Features
-- Create new projects and solutions using the command palette
-- Automatically install MonoGame framework templates 
+- Create new projects from the command palette
+- Automatically install MonoGame framework templates
 - Double-click MGCB files to open the MGCB Editor
-
-
-Image paths are relative to this README file.
 
 For example if there is an image subfolder under your extension project workspace:
 
@@ -27,6 +24,8 @@ Include if your extension adds any VS Code settings through the `contributes.con
 For example:
 
 This extension contributes the following settings:
+
+* `MonoGamey'
 
 * `myExtension.enable`: Enable/disable this extension.
 * `myExtension.thing`: Set to `blah` to do something.

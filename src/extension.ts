@@ -13,27 +13,28 @@ const dialogOptions: vscode.OpenDialogOptions = {
 };
 
 const templates = new Map([
-	["Android Application", "mgandroid"],
-	["Content Pipeline Extension", "mgpipeline"],
-	["Cross-Platform Desktop Application", "mgdesktopgl"],
-	["Game Library", "mglib"],
-	["iOS Application", "mgios"],
-	["Shared Library Project", "mgshared"],
-	["Windows Desktop Application", "mgwindowdx"],
-	["Windows Universal XAML Application", "mguwpxaml"]
+	["$(device-desktop) Cross-Platform Desktop Application", "mgdesktopgl"],
+	["$(device-desktop) Windows Desktop Application", "mgwindowdx"],
+	["$(device-desktop) Windows Universal XAML Application", "mguwpxaml"],
+	["$(device-mobile) Android Application", "mgandroid"],
+	["$(device-mobile) iOS Application", "mgios"],
+	["$(tools) Content Pipeline Extension", "mgpipeline"],
+	["$(archive) Game Library", "mglib"],
+	["$(archive) Shared Library Project", "mgshared"],
+
 ]);
 
 export function activate(context: vscode.ExtensionContext) {
 
 	//Creates new MonoGame project and solution at specified folder
 	const createProject = vscode.commands.registerCommand(
-		'monogame-commands.createProject', () => {
+		'monogame.createProject', () => {
 			getNewProjectInput();
 		});
 	context.subscriptions.push(createProject);
 
 	const openMGCBEditor = vscode.commands.registerCommand(
-		'monogame-commands.MGCB', () => {
+		'monogame.MGCB', () => {
 
 			let folderName: string = '';
 			if (vscode.workspace.workspaceFolders) {

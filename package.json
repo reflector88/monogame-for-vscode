@@ -1,6 +1,6 @@
 {
-  "name": "monogame-commands",
-  "displayName": "MonoGame Commands",
+  "name": "monogame",
+  "displayName": "MonoGame",
   "description": "",
   "version": "0.0.1",
   "engines": {
@@ -14,8 +14,8 @@
   "contributes": {
     "viewsWelcome": [
       {
-        "view": "monogameCommands",
-        "contents": "[Create New Project](command:monogame-commands.createProject) \n[Open MGCB Editor](command:monogame-commands.MGCB)"
+        "view": "monogame",
+        "contents": "[Create New Project](command:monogame.createProject) \n[Open MGCB Editor](command:monogame.MGCB)"
       }
     ],
     "viewsContainers": {
@@ -30,18 +30,18 @@
     "views": {
       "monogame": [
         {
-          "id": "monogameCommands",
+          "id": "monogame",
           "name": "Commands"
         }
       ]
     },
     "commands": [
       {
-        "command": "monogame-commands.createProject",
+        "command": "monogame.createProject",
         "title": "MonoGame: Create New Project"
       },
       {
-        "command": "monogame-commands.MGCB",
+        "command": "monogame.MGCB",
         "title": "MonoGame: Open MGCB Editor"
       }
     ]

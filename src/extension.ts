@@ -49,30 +49,31 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 async function getNewProjectInput() {
-	const projectTemplate = await vscode.window.showQuickPick(Array.from(templates.keys()), quickPickOptions);
-	if (!projectTemplate) return;
+	const template = await vscode.window.showQuickPick(Array.from(templates.keys()), quickPickOptions);
+	if (!template) return;
 
-	const projectName = await vscode.window.showInputBox(inputBoxOptions);
-	if (!projectName) return;
+	const name = await vscode.window.showInputBox(inputBoxOptions);
+	if (!name) return;
 
-	const projectPath = await vscode.window.showOpenDialog(dialogOptions);
-	if (!projectPath) return;
+	const path = await vscode.window.showOpenDialog(dialogOptions);
+	if (!path) return;
 
-	createNewProject(projectPath, projectName, projectTemplate);
+	createNewProject(path, name, template);
 }
 
-function createNewProject(projectPath: vscode.Uri[], projectName: string, projectTemplate: string) {
-	const commandList = [
-		"cd " + projectPath[0].fsPath,
-		"mkdir " + projectName,
-		"cd " + projectName,
-		"dotnet new " + templates.get(projectTemplate) + " -n " + projectName,
-		"dotnet new sln -n " + projectName,
-		"dotnet sln add ./" + projectName + "/" + projectName + ".csproj"
+function createNewProject(path: vscode.Uri[], name: string, template: string) {
+	const commands = [
+		"cd " + path[0].fsPath,
+		"mkdir " + name,
+		"cd " + name,
+		"dotnet new " + templates.get(template) + " -n " + name,
+		"dotnet new sln -n " + name,
+		"dotnet sln add ./" + name + "/" + name + ".csproj",
+		"code ."
 	];
 
-	for (const command of commandList) runShellCommand(command);
-	vscode.window.showInformationMessage("\"" + projectName + "\" created at " + projectPath[0].fsPath);
+	for (const command of commands) runShellCommand(command);
+	vscode.window.showInformationMessage("\"" + name + "\" created at " + path[0].fsPath);
 
 }
 

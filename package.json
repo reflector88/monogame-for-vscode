@@ -12,26 +12,11 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
-    "viewsWelcome": [
-      {
-        "view": "monogame",
-        "contents": "[Create New Project](command:monogame.createProject) \n[Open MGCB Editor](command:monogame.MGCB)"
-      }
-    ],
-    "viewsContainers": {
-      "activitybar": [
+    "menus": {
+      "editor/title": [
         {
-          "id": "monogame",
-          "title": "MonoGame",
-          "icon": "media/monogame.svg"
-        }
-      ]
-    },
-    "views": {
-      "monogame": [
-        {
-          "id": "monogame",
-          "name": "Commands"
+          "command": "monogame.MGCB",
+          "group": "navigation" 
         }
       ]
     },
@@ -42,7 +27,12 @@
       },
       {
         "command": "monogame.MGCB",
-        "title": "MonoGame: Open MGCB Editor"
+        "title": "MonoGame: Open MGCB Editor",
+        "icon": "media/monogame.svg"
+      },
+      {
+        "command": "monogame.install",
+        "title": "MonoGame: Install"
       }
     ]
   },

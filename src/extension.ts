@@ -1,7 +1,17 @@
 import * as vscode from 'vscode';
 import * as child_process from 'child_process';
+import { stderr } from 'process';
 
 let myTerminal: vscode.Terminal;
+
+
+// setIsProjectOpen()
+
+// function setIsProjectOpen() {
+// 	vscode.commands.executeCommand('setContext', 'monogame.isProjectOpen', true);
+// }
+
+// vscode.workspace.onDidOpenTextDocument(setIsProjectOpen);
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -16,19 +26,13 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 }
 
-async function install() {
-	vscode.window.showInformationMessage(
-		"Would you like to install MonoGame templates?", "Install", "Do Not Install")
-		.then((selection) => {
-			if (selection === "Install") {
-				runShellCommand("dotnet new install MonoGame.Templates.CSharp");
-				vscode.window.showInformationMessage("Installing...");
-			}
-		});
+async function installTemplates() {
+	child_process.exec("dotnet new --list | findstr mgdesktopgl", (error, stdout, stderr) => {
+		if (!stdout) runShellCommand("dotnet new install MonoGame.Templates.CSharp");
+	});
 }
 
 function openMGCBEditor() {
-
 	if (vscode.workspace.workspaceFolders) {
 		const workDir = vscode.workspace.workspaceFolders[0].uri.fsPath;
 		const fileDir = `${workDir}\\Content\\Content.mgcb`;
@@ -37,22 +41,13 @@ function openMGCBEditor() {
 	}
 }
 
-// function isPackageInstalled(packageName: string): Promise<boolean> {
-// 	return new Promise((resolve, reject) => {
-// 		exec(`dotnet list package --name ${packageName}`, (error, stdout, stderr) => {
-// 			if (error) {
-// 				reject(error);
-// 				return;
-// 			}
-// 			resolve(stdout.includes(packageName));
-// 		});
-// 	});
-// }
-
 async function getUserInput() {
+
+	await installTemplates();
+
 	const templateCommands = new Map([
 		["$(device-desktop) Cross-Platform Desktop Application", "mgdesktopgl"],
-		["$(device-desktop) Windows Desktop Application", "mgwindowdx"],
+		["$(device-desktop) Windows Desktop Application", "mgwindowsdx"],
 		["$(device-desktop) Windows Universal XAML Application", "mguwpxaml"],
 		["$(device-mobile) Android Application", "mgandroid"],
 		["$(device-mobile) iOS Application", "mgios"],

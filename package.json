@@ -16,7 +16,7 @@
       "editor/title": [
         {
           "command": "monogame.MGCB",
-          "group": "navigation" 
+          "group": "navigation"
         }
       ]
     },

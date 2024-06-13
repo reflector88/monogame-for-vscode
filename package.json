@@ -1,8 +1,8 @@
 {
   "name": "monogame",
-  "displayName": "MonoGame",
-  "description": "",
-  "version": "0.0.1",
+  "displayName": "MonoGame for VS Code",
+  "description": "Better MonoGame integration for Visual Studio Code.",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -17,28 +17,39 @@
     "menus": {
       "editor/title": [
         {
-          "command": "monogame.MGCB",
+          "command": "monogame.openMGCB",
           "when": "monogame.projectOpen",
           "group": "navigation"
         }
       ],
 
+      "commandPalette": [
+        {
+          "command": "monogame.openMGCB",
+          "when": "monogame.projectOpen"
+        }
+      ],
+
       "file/newFile": [
         {
-          "command": "monogame.createProject"
+          "command": "monogame.createProject",
+          "group": "file"
         }
       ]
     },
+
     "commands": [
       {
         "command": "monogame.createProject",
-        "title": "MonoGame: Create New Project"
+        "title": "MonoGame: New Project"
       },
+
       {
-        "command": "monogame.MGCB",
+        "command": "monogame.openMGCB",
         "title": "MonoGame: Open MGCB Editor",
         "icon": "media/monogame.svg"
       },
+
       {
         "command": "monogame.install",
         "title": "MonoGame: Install"

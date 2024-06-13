@@ -3,20 +3,8 @@ import * as child_process from 'child_process';
 
 let myTerminal: vscode.Terminal;
 
-
-function checkProjectOpen() {
-	vscode.workspace.findFiles("**/*.mgcb")
-		.then((pathUri) => {
-			if (pathUri.length > 0) {
-				vscode.commands.executeCommand('setContext', 'monogame.projectOpen', true);
-			} else {
-				vscode.commands.executeCommand('setContext', 'monogame.projectOpen', false);
-			}
-		});
-}
-
 export function activate(context: vscode.ExtensionContext) {
-
+	checkInstallation();
 	checkProjectOpen();
 
 	context.subscriptions.push(
@@ -24,33 +12,42 @@ export function activate(context: vscode.ExtensionContext) {
 			getUserInput()
 		}),
 
-		vscode.commands.registerCommand('monogame.MGCB', () => {
+		vscode.commands.registerCommand('monogame.openMGCB', () => {
 			openMGCBEditor();
+		}),
+
+		vscode.commands.registerCommand('monogame.install', () => {
+			installTemplates();
 		})
 	);
 }
 
-function installTemplates() {
+function checkInstallation() {
 	child_process.exec("dotnet new --list | findstr mgdesktopgl", (error, stdout, stderr) => {
 		if (!stdout) {
-			runShellCommand("dotnet new install MonoGame.Templates.CSharp");
-			vscode.window.showInformationMessage("Installing Templates...");
+			installTemplates();
 		}
 	});
 }
 
-function openMGCBEditor() {
-	if (vscode.workspace.workspaceFolders) {
-		const workDir = vscode.workspace.workspaceFolders[0].uri.fsPath;
-		const fileDir = `${workDir}\\Content\\Content.mgcb`;
+function installTemplates() {
+	runShellCommand("dotnet new install MonoGame.Templates.CSharp");
+	vscode.window.showInformationMessage("Installing Templates...");
+}
 
-		child_process.execFile("dotnet", ["mgcb-editor", fileDir], { cwd: workDir });
-	}
+function checkProjectOpen() {
+	vscode.workspace.findFiles("**/*.mgcb")
+		.then((pathUri) => {
+			if (pathUri.length > 0) {
+				console.log(pathUri);
+				vscode.commands.executeCommand('setContext', 'monogame.projectOpen', true);
+			} else {
+				vscode.commands.executeCommand('setContext', 'monogame.projectOpen', false);
+			}
+		});
 }
 
 async function getUserInput() {
-	installTemplates();
-
 	const templateCommands = new Map([
 		["$(device-desktop) Cross-Platform Desktop Application", "mgdesktopgl"],
 		["$(device-desktop) Windows Desktop Application", "mgwindowsdx"],
@@ -100,6 +97,14 @@ function createNewProject(path: string, name: string, template: string) {
 	vscode.window.showInformationMessage("Creating new project...");
 }
 
+function openMGCBEditor() {
+	if (vscode.workspace.workspaceFolders) {
+		const workDir = vscode.workspace.workspaceFolders[0].uri.fsPath;
+		const fileDir = `${workDir}\\Content\\Content.mgcb`;
+
+		child_process.execFile("dotnet", ["mgcb-editor", fileDir], { cwd: workDir });
+	};
+}
 
 function runShellCommand(command: string) {
 	if (!myTerminal) {

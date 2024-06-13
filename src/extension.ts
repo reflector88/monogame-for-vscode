@@ -1,19 +1,23 @@
 import * as vscode from 'vscode';
 import * as child_process from 'child_process';
-import { stderr } from 'process';
 
 let myTerminal: vscode.Terminal;
 
 
-// setIsProjectOpen()
-
-// function setIsProjectOpen() {
-// 	vscode.commands.executeCommand('setContext', 'monogame.isProjectOpen', true);
-// }
-
-// vscode.workspace.onDidOpenTextDocument(setIsProjectOpen);
+function checkProjectOpen() {
+	vscode.workspace.findFiles("**/*.mgcb")
+		.then((pathUri) => {
+			if (pathUri.length > 0) {
+				vscode.commands.executeCommand('setContext', 'monogame.projectOpen', true);
+			} else {
+				vscode.commands.executeCommand('setContext', 'monogame.projectOpen', false);
+			}
+		});
+}
 
 export function activate(context: vscode.ExtensionContext) {
+
+	checkProjectOpen();
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('monogame.createProject', () => {
@@ -26,9 +30,12 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 }
 
-async function installTemplates() {
+function installTemplates() {
 	child_process.exec("dotnet new --list | findstr mgdesktopgl", (error, stdout, stderr) => {
-		if (!stdout) runShellCommand("dotnet new install MonoGame.Templates.CSharp");
+		if (!stdout) {
+			runShellCommand("dotnet new install MonoGame.Templates.CSharp");
+			vscode.window.showInformationMessage("Installing Templates...");
+		}
 	});
 }
 
@@ -42,8 +49,7 @@ function openMGCBEditor() {
 }
 
 async function getUserInput() {
-
-	await installTemplates();
+	installTemplates();
 
 	const templateCommands = new Map([
 		["$(device-desktop) Cross-Platform Desktop Application", "mgdesktopgl"],

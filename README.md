@@ -1,9 +1,11 @@
+# MonoGame for VS Code
 
-**MonoGame for VSCode** simplifies the process of using MonoGame in Visual Studio Code by importing some of the features of the Visual Studio 2022 MonoGame extension.
+**MonoGame for VS Code** simplifies the process of using MonoGame in Visual Studio Code by porting some of the features of the Visual Studio 2022 MonoGame extension to VSC.
 
-- Automatically installs MonoGame templates
-- Easily create new projects
-- Double-click MGCB files to open the MGCB Editor
+- Create new projects from file menu or command palette
+- Automatically install MonoGame templates
+- Tab bar button for opening the MGCB editor
+
 
 <!-- \!\[feature X\]\(images/feature-x.png\)
 
@@ -12,7 +14,7 @@
 To create your first MonoGame project in VS Code,
 
 1. Install the [.NET SDK](https://dotnet.microsoft.com/en-us/download) and [C# Dev Kit](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit). Restart VS Code, then install this extension.
-2. Open the command palette and choose **"MonoGame: Create New Project"**.
+2. Go to *File > New File > MonoGame: Create New Project*.
 3. Choose a project template (if you aren't sure, choose **"Cross-Platform Desktop Application"**).
 4. Enter project name and directory.
 

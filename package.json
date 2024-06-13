@@ -9,14 +9,23 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "workspaceContains:**/*.mgcb"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "menus": {
       "editor/title": [
         {
           "command": "monogame.MGCB",
+          "when": "monogame.projectOpen",
           "group": "navigation"
+        }
+      ],
+
+      "file/newFile": [
+        {
+          "command": "monogame.createProject"
         }
       ]
     },

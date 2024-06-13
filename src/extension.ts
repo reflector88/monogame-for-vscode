@@ -3,6 +3,7 @@ import * as child_process from 'child_process';
 
 let myTerminal: vscode.Terminal;
 
+//TODO: Search workspace for **/*.mgcb. then use the path to open MGCB
 export function activate(context: vscode.ExtensionContext) {
 	checkInstallation();
 	checkProjectOpen();
@@ -24,9 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 function checkInstallation() {
 	child_process.exec("dotnet new --list | findstr mgdesktopgl", (error, stdout, stderr) => {
-		if (!stdout) {
-			installTemplates();
-		}
+		if (!stdout) installTemplates();
 	});
 }
 
@@ -39,7 +38,6 @@ function checkProjectOpen() {
 	vscode.workspace.findFiles("**/*.mgcb")
 		.then((pathUri) => {
 			if (pathUri.length > 0) {
-				console.log(pathUri);
 				vscode.commands.executeCommand('setContext', 'monogame.projectOpen', true);
 			} else {
 				vscode.commands.executeCommand('setContext', 'monogame.projectOpen', false);
@@ -98,6 +96,15 @@ function createNewProject(path: string, name: string, template: string) {
 }
 
 function openMGCBEditor() {
+	vscode.workspace.findFiles("**/*.mgcb")
+		.then((pathUri) => {
+			if (pathUri.length > 0) {
+				vscode.commands.executeCommand('setContext', 'monogame.projectOpen', true);
+			} else {
+				vscode.commands.executeCommand('setContext', 'monogame.projectOpen', false);
+			}
+		});
+		
 	if (vscode.workspace.workspaceFolders) {
 		const workDir = vscode.workspace.workspaceFolders[0].uri.fsPath;
 		const fileDir = `${workDir}\\Content\\Content.mgcb`;

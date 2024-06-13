@@ -2,7 +2,12 @@
   "name": "monogame",
   "displayName": "MonoGame for VS Code",
   "description": "Better MonoGame integration for Visual Studio Code.",
-  "version": "1.0.0",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reflector88/monogame-for-vscode"
+  },
+  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -22,14 +27,12 @@
           "group": "navigation"
         }
       ],
-
       "commandPalette": [
         {
           "command": "monogame.openMGCB",
           "when": "monogame.projectOpen"
         }
       ],
-
       "file/newFile": [
         {
           "command": "monogame.createProject",
@@ -37,19 +40,16 @@
         }
       ]
     },
-
     "commands": [
       {
         "command": "monogame.createProject",
         "title": "MonoGame: New Project"
       },
-
       {
         "command": "monogame.openMGCB",
         "title": "MonoGame: Open MGCB Editor",
-        "icon": "media/monogame.svg"
+        "icon": "images/monogame_titlebar.svg"
       },
-
       {
         "command": "monogame.install",
         "title": "MonoGame: Install"
@@ -76,7 +76,6 @@
     "@types/node": "18.x",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
-    "eslint": "^8.57.0",
     "esbuild": "^0.21.4",
     "npm-run-all": "^4.1.5",
     "typescript": "^5.4.5",

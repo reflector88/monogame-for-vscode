@@ -15,7 +15,7 @@
     "Other"
   ],
   "activationEvents": [
-    "workspaceContains:**/*.mgcb"
+    "workspaceContains:**/Content/*.mgcb"
   ],
   "main": "./dist/extension.js",
   "contributes": {

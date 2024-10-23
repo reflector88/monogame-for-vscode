@@ -24,7 +24,20 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function checkInstallation() {
-	child_process.exec("dotnet new --list | findstr mgdesktopgl", (error, stdout, stderr) => {
+	let checkCommand = "dotnet new --list | ";
+	switch (process.platform) {
+		case "win32":
+			checkCommand += "findstr mgdesktopgl";
+			break;
+		case "darwin":
+		case "linux":
+			checkCommand += "grep mgdesktopgl";
+			break;
+		default:
+			vscode.window.showErrorMessage("Automatic template installation is not supported.");
+			return;
+	}
+	child_process.exec(checkCommand, (error, stdout, stderr) => {
 		if (!stdout) installTemplates();
 	});
 }

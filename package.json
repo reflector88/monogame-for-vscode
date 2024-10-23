@@ -49,7 +49,10 @@
       {
         "command": "monogame.openMGCB",
         "title": "MonoGame: Open MGCB Editor",
-        "icon": "images/monogame_titlebar.svg"
+        "icon": {
+          "dark": "images/monogame_titlebar_dark.svg",
+          "light": "images/monogame_titlebar_light.svg"
+        }
       },
       {
         "command": "monogame.install",

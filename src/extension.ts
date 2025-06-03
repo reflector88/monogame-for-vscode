@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('monogame.createProject', () => {
-			getUserInput()
+			getUserInput();
 		}),
 
 		vscode.commands.registerCommand('monogame.openMGCB', () => {
@@ -109,6 +109,11 @@ function createNewProject(path: string, name: string, template: string) {
 
 function openMGCBEditor() {
 	vscode.workspace.findFiles("**/Content/*.mgcb").then((pathUri) => {
+		if (pathUri.length === 0) {
+            vscode.window.showErrorMessage("Could not find .mgcb file in current directory.");
+            return;
+		}
+		
 		try {
 			const fileDir = pathUri[0].fsPath;
 
@@ -122,16 +127,23 @@ function openMGCBEditor() {
 }
 
 function runShellCommand(command: string) {
-	if (!myTerminal) {
-		if (vscode.window.activeTerminal && vscode.window.activeTerminal.name === "powershell") {
-			myTerminal = vscode.window.activeTerminal;
-		} else {
-			myTerminal = vscode.window.createTerminal();
+	try {
+		if (!myTerminal) {
+			if (vscode.window.activeTerminal && vscode.window.activeTerminal.name === "powershell") {
+				myTerminal = vscode.window.activeTerminal;
+			} else {
+				myTerminal = vscode.window.createTerminal();
+			}
 		}
+		myTerminal.sendText(command);
 	}
-	myTerminal.sendText(command);
+	catch (error) {
+		vscode.window.showErrorMessage(`Error executing command: ${error instanceof Error ? error.message : "Unknown error"}`);
+	}
 }
 
 export function deactivate() {
-	myTerminal.dispose();
+	if (myTerminal) {
+		myTerminal.dispose();
+	}
 }

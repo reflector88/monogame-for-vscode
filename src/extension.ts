@@ -163,12 +163,19 @@ async function getMonoGameTemplates(): Promise<Map<string, string>> {
                 // Parse the output
                 const lines = stdout.split('\n');
                 for (const line of lines) {
-                    // Skip empty lines
-                    if (!line.trim()) continue;
+          			const trimmedLine = line.trim();
 
-                    // Parse template info from the line
-                    // Format is typically: Template Name, Short Name, Language, Tags
-                    const parts = line.trim().split(/\s{2,}/);
+					// Skip empty lines, header, and separator
+					if (
+						!trimmedLine ||
+						trimmedLine.startsWith("Template Name") ||
+						trimmedLine.startsWith("---")
+					) continue;
+					
+					// Parse template info from the line
+					// Format is typically: Template Name, Short Name, Language, Tags
+					const parts = trimmedLine.split(/\s{2,}/);
+					
                     if (parts.length >= 2) {
                         const templateName = parts[0].trim();
                         const shortName = parts[1].trim();

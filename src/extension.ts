@@ -2,6 +2,9 @@ import * as vscode from 'vscode';
 import * as child_process from 'child_process';
 import { dirname } from 'path';
 
+// Constants
+const MONOGAME_TEMPLATE_LIST_COMMAND = "dotnet new list MonoGame";
+
 let myTerminal: vscode.Terminal;
 
 export function activate(context: vscode.ExtensionContext) {
@@ -10,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('monogame.createProject', () => {
-			getUserInput()
+			getUserInput();
 		}),
 
 		vscode.commands.registerCommand('monogame.openMGCB', () => {
@@ -24,20 +27,16 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function checkInstallation() {
-	let checkCommand = "dotnet new --list | ";
 	switch (process.platform) {
 		case "win32":
-			checkCommand += "findstr mgdesktopgl";
-			break;
 		case "darwin":
 		case "linux":
-			checkCommand += "grep mgdesktopgl";
 			break;
 		default:
 			vscode.window.showErrorMessage("Automatic template installation is not supported.");
 			return;
 	}
-	child_process.exec(checkCommand, (error, stdout, stderr) => {
+	child_process.exec(MONOGAME_TEMPLATE_LIST_COMMAND, (error, stdout, stderr) => {
 		if (!stdout) installTemplates();
 	});
 }
@@ -59,16 +58,13 @@ function checkProjectOpen() {
 }
 
 async function getUserInput() {
-	const templateCommands = new Map([
-		["$(device-desktop) Cross-Platform Desktop Application", "mgdesktopgl"],
-		["$(device-desktop) Windows Desktop Application", "mgwindowsdx"],
-		["$(device-desktop) Windows Universal XAML Application", "mguwpxaml"],
-		["$(device-mobile) Android Application", "mgandroid"],
-		["$(device-mobile) iOS Application", "mgios"],
-		["$(tools) Content Pipeline Extension", "mgpipeline"],
-		["$(archive) Game Library", "mglib"],
-		["$(archive) Shared Library Project", "mgshared"],
-	]);
+	// Get templates dynamically
+	const templateCommands = await getMonoGameTemplates();
+
+	if (templateCommands.size === 0) {
+        vscode.window.showErrorMessage("No MonoGame templates found. Please make sure MonoGame templates are installed.");
+        return;
+    }
 
 	const template = await vscode.window.showQuickPick(Array.from(templateCommands.keys()), {
 		title: "Create MonoGame Project",
@@ -109,6 +105,11 @@ function createNewProject(path: string, name: string, template: string) {
 
 function openMGCBEditor() {
 	vscode.workspace.findFiles("**/Content/*.mgcb").then((pathUri) => {
+		if (pathUri.length === 0) {
+            vscode.window.showErrorMessage("Could not find .mgcb file in current directory.");
+            return;
+		}
+		
 		try {
 			const fileDir = pathUri[0].fsPath;
 
@@ -122,16 +123,74 @@ function openMGCBEditor() {
 }
 
 function runShellCommand(command: string) {
-	if (!myTerminal) {
-		if (vscode.window.activeTerminal && vscode.window.activeTerminal.name === "powershell") {
-			myTerminal = vscode.window.activeTerminal;
-		} else {
-			myTerminal = vscode.window.createTerminal();
+	try {
+		if (!myTerminal) {
+			if (vscode.window.activeTerminal && vscode.window.activeTerminal.name === "powershell") {
+				myTerminal = vscode.window.activeTerminal;
+			} else {
+				myTerminal = vscode.window.createTerminal();
+			}
 		}
+		myTerminal.sendText(command);
 	}
-	myTerminal.sendText(command);
+	catch (error) {
+		vscode.window.showErrorMessage(`Error executing command: ${error instanceof Error ? error.message : "Unknown error"}`);
+	}
 }
 
 export function deactivate() {
-	myTerminal.dispose();
+	if (myTerminal) {
+		myTerminal.dispose();
+	}
+}
+
+/**
+ * Fetches available MonoGame templates from dotnet CLI
+ * @returns Map of template display names to template short names
+ */
+async function getMonoGameTemplates(): Promise<Map<string, string>> {
+    return new Promise((resolve) => {
+        const templateMap = new Map<string, string>();
+
+        // Run dotnet command to list MonoGame templates
+        child_process.exec(MONOGAME_TEMPLATE_LIST_COMMAND, (error, stdout, stderr) => {
+            if (error || !stdout) {
+                vscode.window.showErrorMessage(`Error executing command: ${error instanceof Error ? error.message : "Unknown error"}`);
+                return;
+            }
+
+            try {
+                // Parse the output
+                const lines = stdout.split('\n');
+                for (const line of lines) {
+                    // Skip empty lines
+                    if (!line.trim()) continue;
+
+                    // Parse template info from the line
+                    // Format is typically: Template Name, Short Name, Language, Tags
+                    const parts = line.trim().split(/\s{2,}/);
+                    if (parts.length >= 2) {
+                        const templateName = parts[0].trim();
+                        const shortName = parts[1].trim();
+
+                        // Add icon based on template name
+                        let icon = "$(device-desktop)";
+                        if (templateName.includes("Android") || templateName.includes("iOS")) {
+                            icon = "$(device-mobile)";
+                        } else if (templateName.includes("Library") || templateName.includes("Shared")) {
+                            icon = "$(archive)";
+                        } else if (templateName.includes("Pipeline")) {
+                            icon = "$(tools)";
+                        }
+
+                        templateMap.set(`${icon} ${templateName}`, shortName);
+                    }
+                }
+
+                resolve(templateMap);
+            } catch (error) {
+                vscode.window.showErrorMessage(`Error executing command: ${error instanceof Error ? error.message : "Unknown error"}`);
+            }
+        });
+    });
 }

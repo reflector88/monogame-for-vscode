@@ -58,6 +58,12 @@
         "command": "monogame.install",
         "title": "MonoGame: Install"
       }
+    ],
+    "languages": [
+      {
+        "id": "csharp",
+        "extensions": [".cs"]
+      }
     ]
   },
   "scripts": {

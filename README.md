@@ -1,10 +1,11 @@
 # MonoGame for VS Code
 
-**MonoGame for VS Code** streamlines the experience of using [MonoGame](https://github.com/MonoGame/MonoGame) in Visual Studio Code. It ports key features of the Visual Studio 2022 MonoGame extension to VSC, including:
+**MonoGame for VS Code** streamlines the experience of using [MonoGame](https://github.com/MonoGame/MonoGame) in Visual Studio Code. It ports key features of the Visual Studio 2022 MonoGame extension to VSC, allowing you to:
 
 - Automatically install MonoGame templates
 - Create new projects from the file menu or command palette
 - Open the MGCB editor with the click of a button
+- See Intellisense suggestions when loading content
 
 ## Requirements
 
@@ -31,6 +32,11 @@ To open the MGCB editor, click the MonoGame button in the editor title bar or se
 ![MGCB Button](images/tutorial3.png)
 
 Templates are installed automatically the first time the extension is activated, but if you need to reinstall, you may use the *MonoGame: Install* command.
+
+## Other Features
+MonoGame for VS Code now features autocomplete when loading content:
+
+![MGCB Button](images/tutorial4.png)
 
 ## License
 [MIT](LICENSE.md) © reflector88

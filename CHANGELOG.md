@@ -11,3 +11,6 @@
 ## [0.0.3] - 2025-6-14
 - Template list is now dynamically populated (in preparation for templates that may be added in the future)
 - Updated dependencies
+
+## [0.0.4] - 2025-8-20
+- Added autocompletion when loading content

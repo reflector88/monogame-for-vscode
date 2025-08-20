@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as child_process from 'child_process';
 import { dirname } from 'path';
+import { activate as activateCompletion } from './suggest';
 
 // Constants
 const MONOGAME_TEMPLATE_LIST_COMMAND = "dotnet new list MonoGame";
@@ -10,6 +11,8 @@ let myTerminal: vscode.Terminal;
 export function activate(context: vscode.ExtensionContext) {
 	checkInstallation();
 	checkProjectOpen();
+
+	activateCompletion(context);
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('monogame.createProject', () => {

@@ -36,7 +36,7 @@ export class ContentCompletionItemProvider implements vscode.CompletionItemProvi
 	public static readonly triggerCharacters = ['"', '/', '\\'];
 
 	private readonly _paths = new Map<string, Set<string>>();
-	private readonly _contentRegex = /#begin\s+(.+?)\n/g;
+	private readonly _contentRegex = /#begin\s+(.+?)\s*$/gmi;
 	private readonly _completionRegex = /Content\.Load\<.+\>\("([\w\.\/\\]*)/;
 
 	public get pathList() : string[] {

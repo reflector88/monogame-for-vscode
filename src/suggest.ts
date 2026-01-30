@@ -86,7 +86,8 @@ export class ContentCompletionItemProvider implements vscode.CompletionItemProvi
 
 		let match;
 		while ((match = this._contentRegex.exec(content)) !== null) {
-			set.add(match[1]);
+			const noExtPath = match[1].replace(/\.[^./\\]+$/, '');
+			set.add(noExtPath);
 		}
 		this._paths.set(fileName, set);
 	}

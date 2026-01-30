@@ -1,9 +1,10 @@
 # Change Log
 
-## [Unreleased]
+## [0.0.6] - 2026-1-29
+- Autocompleted string no longer contains file extension
 
 ## [0.0.5] - 2025-12-11
--Updated dependencies
+- Updated dependencies
 
 ## [0.0.4] - 2025-8-20
 - Added autocompletion when loading content

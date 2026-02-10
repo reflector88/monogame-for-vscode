@@ -2,7 +2,7 @@
   "name": "monogame",
   "displayName": "MonoGame for VS Code",
   "description": "Better MonoGame integration for Visual Studio Code.",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "publisher": "r88",
   "repository": {
     "type": "git",

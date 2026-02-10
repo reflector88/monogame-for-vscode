@@ -1,4 +1,6 @@
 # Change Log
+## [0.0.7] - 2026-1-29
+- Updated dependencies (brace-expansion vulnerability)
 
 ## [0.0.6] - 2026-1-29
 - Autocompleted string no longer contains file extension
